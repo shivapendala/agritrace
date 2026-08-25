@@ -1,6 +1,14 @@
+import enum
 from datetime import datetime
 from typing import Optional, List
 from pydantic import BaseModel
+
+
+class AuthenticityStatus(str, enum.Enum):
+    VERIFIED = "VERIFIED"
+    SUSPICIOUS = "SUSPICIOUS"
+    REVOKED = "REVOKED"
+    UNKNOWN = "UNKNOWN"
 
 
 class PublicTimelineStep(BaseModel):
@@ -13,6 +21,8 @@ class PublicTimelineStep(BaseModel):
 
 class PublicProductVerificationResponse(BaseModel):
     is_valid: bool
+    authenticity_status: AuthenticityStatus
+    status_explanation: str
     qr_code: str
     batch_number: str
     product_name: str
@@ -21,10 +31,11 @@ class PublicProductVerificationResponse(BaseModel):
     current_status: str
     current_location: str
 
-    # Public Farmer & Farm Info (No phone, email, or private details)
+    # Public Farmer & Farm Info (Strictly excludes phone, email, password)
     farmer_name: str
     farm_name: str
     farm_address: str
+    origin_region: str
 
     # Public Quality Info
     harvest_date: datetime
@@ -36,5 +47,5 @@ class PublicProductVerificationResponse(BaseModel):
     transport_tracking_number: Optional[str] = None
     retailer_name: Optional[str] = None
 
-    # Provenance Timeline
+    # Provenance Lifecycle Timeline
     timeline: List[PublicTimelineStep]
