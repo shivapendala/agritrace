@@ -56,6 +56,13 @@ from app.schemas.transport import (
     TemperatureLogResponse,
     ShipmentResponse,
 )
+from app.schemas.retail import (
+    RetailerProfileCreate,
+    RetailerProfileResponse,
+    RetailReceiptCreate,
+    RetailReceiptResponse,
+    RetailInventoryResponse,
+)
 
 __all__ = [
     "UserCreate",
@@ -104,4 +111,9 @@ __all__ = [
     "TemperatureLogCreate",
     "TemperatureLogResponse",
     "ShipmentResponse",
+    "RetailerProfileCreate",
+    "RetailerProfileResponse",
+    "RetailReceiptCreate",
+    "RetailReceiptResponse",
+    "RetailInventoryResponse",
 ]
