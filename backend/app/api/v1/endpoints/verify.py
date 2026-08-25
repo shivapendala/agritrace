@@ -125,6 +125,9 @@ def verify_product_qr(
 
     farm_address = batch.farm.location_address if batch.farm else "Agricultural District"
 
+    from app.services.audit_service import log_audit
+    log_audit(db, action="QR_VERIFICATION", entity="Batch", entity_id=batch.id, user_id=None, metadata={"identifier": identifier, "is_valid": auth_status != AuthenticityStatus.REVOKED})
+
     return PublicProductVerificationResponse(
         is_valid=auth_status != AuthenticityStatus.REVOKED,
         authenticity_status=auth_status,

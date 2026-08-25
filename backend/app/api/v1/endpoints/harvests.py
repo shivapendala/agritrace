@@ -104,6 +104,9 @@ def record_harvest(
         message=f"New harvest batch #{batch_number} ({harvest.product_name}) is ready for quality inspection."
     )
 
+    from app.services.audit_service import log_audit
+    log_audit(db, action="BATCH_CREATION", entity="Batch", entity_id=batch.id, user_id=current_user.id, metadata={"batch_number": batch_number, "product_name": harvest.product_name, "quantity": harvest.quantity})
+
     return harvest
 
 

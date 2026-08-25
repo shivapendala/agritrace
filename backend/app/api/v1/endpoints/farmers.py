@@ -96,6 +96,9 @@ def verify_farmer(
         message="Your farmer profile has been verified by System Super Admin."
     )
 
+    from app.services.audit_service import log_audit
+    log_audit(db, action="FARMER_VERIFICATION", entity="FarmerProfile", entity_id=profile.id, user_id=current_user.id, metadata={"farmer_user_id": profile.user_id})
+
     return profile
 
 

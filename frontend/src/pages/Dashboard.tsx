@@ -10,9 +10,11 @@ import { WarehouseManagerDashboard } from './WarehouseManagerDashboard';
 import { TransportManagerDashboard } from './TransportManagerDashboard';
 import { RetailerDashboard } from './RetailerDashboard';
 import { AnalyticsDashboard } from './AnalyticsDashboard';
+import { AuditLogViewer } from './AuditLogViewer';
 import {
   Sprout,
   ShieldCheck,
+  Shield,
   CheckCircle2,
   Truck,
   Warehouse,
@@ -31,7 +33,7 @@ export const Dashboard: React.FC = () => {
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [userError, setUserError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'warehouse' | 'transport' | 'retail' | 'batches' | 'admin_users' | 'admin_farmers' | 'analytics'>('analytics');
+  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'warehouse' | 'transport' | 'retail' | 'batches' | 'admin_users' | 'admin_farmers' | 'analytics' | 'audit_logs'>('analytics');
 
   useEffect(() => {
     if (user && user.role === 'SUPER_ADMIN') {
@@ -145,6 +147,12 @@ export const Dashboard: React.FC = () => {
               <BarChart3 size={16} /> Traceability Analytics & Reports
             </button>
             <button
+              onClick={() => setActiveTab('audit_logs')}
+              className={`btn ${activeTab === 'audit_logs' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Shield size={16} /> Security Audit Log
+            </button>
+            <button
               onClick={() => setActiveTab('retail')}
               className={`btn ${activeTab === 'retail' ? 'btn-primary' : 'btn-secondary'}`}
             >
@@ -193,6 +201,12 @@ export const Dashboard: React.FC = () => {
       {(user.role === 'SUPER_ADMIN' && activeTab === 'analytics') && (
         <div style={{ marginBottom: '2.5rem' }}>
           <AnalyticsDashboard />
+        </div>
+      )}
+
+      {(user.role === 'SUPER_ADMIN' && activeTab === 'audit_logs') && (
+        <div style={{ marginBottom: '2.5rem' }}>
+          <AuditLogViewer />
         </div>
       )}
 

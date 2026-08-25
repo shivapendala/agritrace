@@ -51,6 +51,10 @@ def register(
     db.add(user)
     db.commit()
     db.refresh(user)
+
+    from app.services.audit_service import log_audit
+    log_audit(db, action="USER_CREATION", entity="User", entity_id=user.id, user_id=user.id, metadata={"role": user.role.value, "email": user.email})
+
     return user
 
 
@@ -78,6 +82,9 @@ def login(
 
     access_token = create_access_token(subject=user.id, role=user.role.value)
     refresh_token = create_refresh_token(subject=user.id)
+
+    from app.services.audit_service import log_audit
+    log_audit(db, action="LOGIN", entity="User", entity_id=user.id, user_id=user.id, metadata={"email": user.email, "role": user.role.value})
 
     return {
         "access_token": access_token,

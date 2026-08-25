@@ -125,6 +125,9 @@ def approve_inspection(
         message=f"Batch #{batch.batch_number if batch else ''} approved for warehouse receiving."
     )
 
+    from app.services.audit_service import log_audit
+    log_audit(db, action="QUALITY_APPROVAL", entity="QualityInspection", entity_id=inspection.id, user_id=current_user.id, metadata={"batch_id": inspection.batch_id, "grade": inspection.quality_grade.value})
+
     return inspection
 
 
@@ -163,6 +166,9 @@ def reject_inspection(
             title=f"Quality Rejected - Batch #{batch.batch_number}",
             message=f"Batch #{batch.batch_number} ({batch.product_name}) failed quality inspection and has been rejected."
         )
+
+    from app.services.audit_service import log_audit
+    log_audit(db, action="QUALITY_REJECTION", entity="QualityInspection", entity_id=inspection.id, user_id=current_user.id, metadata={"batch_id": inspection.batch_id, "reason": action.notes})
 
     return inspection
 

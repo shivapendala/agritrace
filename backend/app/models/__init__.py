@@ -8,6 +8,7 @@ from app.models.warehouse import Warehouse, StorageZone, StorageLocation, Invent
 from app.models.transport import Vehicle, DriverProfile, Shipment, TemperatureLog, TransportStatus
 from app.models.retail import RetailerProfile, RetailReceipt, RetailInventory, ReceiptStatus
 from app.models.notification import Notification
+from app.models.audit_log import AuditLog
 
 __all__ = [
     "Base",
@@ -40,4 +41,5 @@ __all__ = [
     "RetailInventory",
     "ReceiptStatus",
     "Notification",
+    "AuditLog",
 ]
