@@ -86,6 +86,16 @@ def verify_farmer(
 
     db.commit()
     db.refresh(profile)
+
+    from app.services.notification_service import notify_user
+    notify_user(
+        db,
+        recipient_id=profile.user_id,
+        notification_type="FARMER_VERIFICATION",
+        title="Profile Verification Approved",
+        message="Your farmer profile has been verified by System Super Admin."
+    )
+
     return profile
 
 

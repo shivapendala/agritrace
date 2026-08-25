@@ -133,6 +133,23 @@ def confirm_delivery_receipt(
     db.add(receipt)
     db.commit()
     db.refresh(receipt)
+
+    from app.services.notification_service import notify_user, notify_roles
+    notify_user(
+        db,
+        recipient_id=current_user.id,
+        notification_type="RETAILER_RECEIPT",
+        title="Delivery Receipt Confirmed",
+        message=f"Confirmed receipt for Batch #{batch.batch_number if batch else ''}. Accepted Qty: {receipt_in.accepted_quantity} {batch.unit if batch else 'KG'}."
+    )
+    notify_roles(
+        db,
+        roles=[UserRole.TRANSPORT_MANAGER, UserRole.SUPER_ADMIN],
+        notification_type="RETAILER_RECEIPT",
+        title=f"Retail Delivery Verified - #{shipment.tracking_number}",
+        message=f"Retailer confirmed delivery for shipment #{shipment.tracking_number}."
+    )
+
     return receipt
 
 

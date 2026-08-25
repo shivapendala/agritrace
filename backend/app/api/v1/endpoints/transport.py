@@ -136,6 +136,16 @@ def create_shipment(
     db.add(shipment)
     db.commit()
     db.refresh(shipment)
+
+    from app.services.notification_service import notify_roles
+    notify_roles(
+        db,
+        roles=[UserRole.DRIVER, UserRole.TRANSPORT_MANAGER],
+        notification_type="SHIPMENT_DISPATCHED",
+        title=f"Shipment Order Created #{shipment.tracking_number}",
+        message=f"New shipment dispatch order created for destination {shipment.destination_address}."
+    )
+
     return shipment
 
 
@@ -234,6 +244,17 @@ def update_shipment_status(
 
     db.commit()
     db.refresh(shipment)
+
+    from app.services.notification_service import notify_roles
+    if status_in.status == TransportStatus.DELIVERED:
+        notify_roles(
+            db,
+            roles=[UserRole.RETAILER, UserRole.TRANSPORT_MANAGER],
+            notification_type="SHIPMENT_DELIVERED",
+            title=f"Shipment Delivered - #{shipment.tracking_number}",
+            message=f"Shipment #{shipment.tracking_number} has been delivered to {shipment.destination_address}."
+        )
+
     return shipment
 
 
@@ -273,4 +294,15 @@ def record_temperature_telemetry(
     db.add(log_entry)
     db.commit()
     db.refresh(log_entry)
+
+    from app.services.notification_service import notify_roles
+    if is_breach:
+        notify_roles(
+            db,
+            roles=[UserRole.TRANSPORT_MANAGER, UserRole.QUALITY_OFFICER],
+            notification_type="TEMPERATURE_WARNING",
+            title=f"TEMPERATURE WARNING ALERT #{shipment.tracking_number}",
+            message=breach_msg
+        )
+
     return log_entry

@@ -3,6 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { Sprout, LogOut, LayoutDashboard, LogIn, UserPlus, Shield, Award, Warehouse, Truck, Store, QrCode } from 'lucide-react';
 
+import { NotificationBell } from './NotificationBell';
+
 export const Navigation: React.FC = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -102,6 +104,8 @@ export const Navigation: React.FC = () => {
                 </Link>
               );
             })}
+
+            <NotificationBell />
 
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginLeft: '0.5rem', paddingLeft: '0.75rem', borderLeft: '1px solid var(--border-color)' }}>
               <span className={`role-badge role-${user.role}`}>{user.role}</span>

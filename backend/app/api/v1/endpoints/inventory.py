@@ -71,6 +71,24 @@ def receive_inventory_batch(
     db.add(inventory_item)
     db.commit()
     db.refresh(inventory_item)
+
+    from app.services.notification_service import notify_user, notify_roles
+    notify_roles(
+        db,
+        roles=[UserRole.WAREHOUSE_MANAGER],
+        notification_type="BATCH_RECEIVED",
+        title=f"Batch Received - Warehouse {warehouse.name}",
+        message=f"Batch #{batch.batch_number} ({item_in.quantity} {item_in.unit}) stored in Warehouse {warehouse.name}."
+    )
+    if batch and batch.farmer and batch.farmer.user_id:
+        notify_user(
+            db,
+            recipient_id=batch.farmer.user_id,
+            notification_type="BATCH_RECEIVED",
+            title=f"Batch Received in Warehouse",
+            message=f"Your batch #{batch.batch_number} has been received into Warehouse {warehouse.name}."
+        )
+
     return inventory_item
 
 

@@ -7,6 +7,7 @@ from app.models.inspection import QualityInspection, InspectionStatus, QualityGr
 from app.models.warehouse import Warehouse, StorageZone, StorageLocation, InventoryItem, InventoryStatus
 from app.models.transport import Vehicle, DriverProfile, Shipment, TemperatureLog, TransportStatus
 from app.models.retail import RetailerProfile, RetailReceipt, RetailInventory, ReceiptStatus
+from app.models.notification import Notification
 
 __all__ = [
     "Base",
@@ -38,4 +39,5 @@ __all__ = [
     "RetailReceipt",
     "RetailInventory",
     "ReceiptStatus",
+    "Notification",
 ]

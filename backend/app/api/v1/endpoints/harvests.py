@@ -87,6 +87,23 @@ def record_harvest(
     db.refresh(batch)
 
     db.refresh(harvest)
+
+    from app.services.notification_service import notify_user, notify_roles
+    notify_user(
+        db,
+        recipient_id=current_user.id,
+        notification_type="HARVEST_CREATED",
+        title="Harvest Recorded Successfully",
+        message=f"Recorded harvest for {harvest.product_name} ({harvest.quantity} {harvest.unit}). Traceability Batch #{batch_number} created."
+    )
+    notify_roles(
+        db,
+        roles=[UserRole.QUALITY_OFFICER],
+        notification_type="HARVEST_CREATED",
+        title="New Batch Awaiting Inspection",
+        message=f"New harvest batch #{batch_number} ({harvest.product_name}) is ready for quality inspection."
+    )
+
     return harvest
 
 

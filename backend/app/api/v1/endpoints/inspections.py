@@ -107,6 +107,24 @@ def approve_inspection(
 
     db.commit()
     db.refresh(inspection)
+
+    from app.services.notification_service import notify_user, notify_roles
+    if batch and batch.farmer and batch.farmer.user_id:
+        notify_user(
+            db,
+            recipient_id=batch.farmer.user_id,
+            notification_type="QUALITY_APPROVED",
+            title=f"Quality Approved - Batch #{batch.batch_number}",
+            message=f"Batch #{batch.batch_number} ({batch.product_name}) passed quality inspection with Grade {inspection.quality_grade.value}."
+        )
+    notify_roles(
+        db,
+        roles=[UserRole.WAREHOUSE_MANAGER],
+        notification_type="QUALITY_APPROVED",
+        title="Approved Batch Ready for Warehouse",
+        message=f"Batch #{batch.batch_number if batch else ''} approved for warehouse receiving."
+    )
+
     return inspection
 
 
@@ -135,6 +153,17 @@ def reject_inspection(
 
     db.commit()
     db.refresh(inspection)
+
+    from app.services.notification_service import notify_user
+    if batch and batch.farmer and batch.farmer.user_id:
+        notify_user(
+            db,
+            recipient_id=batch.farmer.user_id,
+            notification_type="QUALITY_REJECTED",
+            title=f"Quality Rejected - Batch #{batch.batch_number}",
+            message=f"Batch #{batch.batch_number} ({batch.product_name}) failed quality inspection and has been rejected."
+        )
+
     return inspection
 
 
