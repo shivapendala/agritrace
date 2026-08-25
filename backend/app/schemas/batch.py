@@ -19,6 +19,7 @@ class HarvestCreate(BaseModel):
 class BatchResponse(BaseModel):
     id: str
     batch_number: str
+    qr_code: str
     harvest_id: str
     farmer_id: str
     farm_id: str

@@ -9,11 +9,17 @@ import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { Unauthorized } from './pages/Unauthorized';
 
+import { PublicVerifyProduct } from './pages/PublicVerifyProduct';
+
 export const App: React.FC = () => {
   return (
     <AuthProvider>
       <Router>
         <Routes>
+          {/* Public Verification Page without Layout wrap */}
+          <Route path="/verify" element={<PublicVerifyProduct />} />
+          <Route path="/verify/:qrCode" element={<PublicVerifyProduct />} />
+
           <Route element={<Layout />}>
             {/* Public Routes */}
             <Route path="/" element={<Home />} />
