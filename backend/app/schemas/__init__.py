@@ -30,6 +30,20 @@ from app.schemas.inspection import (
     InspectionReviewAction,
     InspectionResponse,
 )
+from app.schemas.warehouse import (
+    WarehouseCreate,
+    WarehouseResponse,
+    StorageZoneCreate,
+    StorageZoneResponse,
+    StorageLocationCreate,
+    StorageLocationResponse,
+    InventoryReceive,
+    InventoryMove,
+    InventorySplit,
+    InventoryAdjust,
+    InventoryDispatch,
+    InventoryResponse,
+)
 
 __all__ = [
     "UserCreate",
@@ -56,4 +70,16 @@ __all__ = [
     "InspectionCreate",
     "InspectionReviewAction",
     "InspectionResponse",
+    "WarehouseCreate",
+    "WarehouseResponse",
+    "StorageZoneCreate",
+    "StorageZoneResponse",
+    "StorageLocationCreate",
+    "StorageLocationResponse",
+    "InventoryReceive",
+    "InventoryMove",
+    "InventorySplit",
+    "InventoryAdjust",
+    "InventoryDispatch",
+    "InventoryResponse",
 ]

@@ -6,6 +6,7 @@ import { FarmerDashboard } from './FarmerDashboard';
 import { AdminFarmerManagement } from './AdminFarmerManagement';
 import { HarvestBatchManager } from './HarvestBatchManager';
 import { QualityOfficerDashboard } from './QualityOfficerDashboard';
+import { WarehouseManagerDashboard } from './WarehouseManagerDashboard';
 import {
   Sprout,
   ShieldCheck,
@@ -26,7 +27,7 @@ export const Dashboard: React.FC = () => {
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [userError, setUserError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
+  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'warehouse' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
 
   useEffect(() => {
     if (user && user.role === 'SUPER_ADMIN') {
@@ -104,8 +105,23 @@ export const Dashboard: React.FC = () => {
           </button>
         )}
 
+        {user.role === 'WAREHOUSE_MANAGER' && (
+          <button
+            onClick={() => setActiveTab('warehouse')}
+            className="btn btn-primary"
+          >
+            <Warehouse size={16} /> Warehouse & Inventory Operations
+          </button>
+        )}
+
         {user.role === 'SUPER_ADMIN' && (
           <>
+            <button
+              onClick={() => setActiveTab('warehouse')}
+              className={`btn ${activeTab === 'warehouse' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Warehouse size={16} /> Warehouse & Inventory
+            </button>
             <button
               onClick={() => setActiveTab('inspections')}
               className={`btn ${activeTab === 'inspections' ? 'btn-primary' : 'btn-secondary'}`}
@@ -141,13 +157,19 @@ export const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {(user.role === 'QUALITY_OFFICER' || activeTab === 'inspections') && (
+      {(user.role === 'QUALITY_OFFICER' || (activeTab === 'inspections' && user.role === 'SUPER_ADMIN')) && (
         <div style={{ marginBottom: '2.5rem' }}>
           <QualityOfficerDashboard />
         </div>
       )}
 
-      {(activeTab === 'batches' && user.role !== 'QUALITY_OFFICER') && (
+      {(user.role === 'WAREHOUSE_MANAGER' || activeTab === 'warehouse') && (
+        <div style={{ marginBottom: '2.5rem' }}>
+          <WarehouseManagerDashboard />
+        </div>
+      )}
+
+      {(activeTab === 'batches' && user.role !== 'QUALITY_OFFICER' && user.role !== 'WAREHOUSE_MANAGER') && (
         <div style={{ marginBottom: '2.5rem' }}>
           <HarvestBatchManager />
         </div>
