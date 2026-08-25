@@ -9,7 +9,8 @@ from app.core.security import (
     create_refresh_token,
     decode_token
 )
-from app.models.user import User, UserRole
+from app.models.user import User
+from app.models.role import UserRole
 from app.schemas.auth import (
     UserCreate,
     UserResponse,
@@ -28,7 +29,7 @@ def register(
     db: Session = Depends(get_db)
 ) -> Any:
     """
-    Register a new user in the AgriTrace system.
+    Register a new user in the AgriTrace platform.
     """
     existing_user = db.query(User).filter(User.email == user_in.email).first()
     if existing_user:
@@ -59,7 +60,7 @@ def login(
     db: Session = Depends(get_db)
 ) -> Any:
     """
-    Authenticate user and issue JWT Access and Refresh Tokens.
+    Authenticate user and issue JWT Access & Refresh tokens.
     """
     user = db.query(User).filter(User.email == login_data.email).first()
     if not user or not verify_password(login_data.password, user.hashed_password):
@@ -91,7 +92,7 @@ def get_me(
     current_user: User = Depends(get_current_user)
 ) -> Any:
     """
-    Get profile information of currently authenticated user.
+    Get current authenticated user profile.
     """
     return current_user
 
@@ -102,7 +103,7 @@ def refresh_token(
     db: Session = Depends(get_db)
 ) -> Any:
     """
-    Refresh access token using a valid refresh token.
+    Refresh JWT access token using a valid refresh token.
     """
     payload = decode_token(refresh_in.refresh_token)
     if payload is None or payload.get("type") != "refresh":
@@ -128,6 +129,28 @@ def refresh_token(
         "token_type": "bearer",
         "user": user
     }
+
+
+# Demonstration Role-Protected Endpoints for Testing & Verification
+@router.get("/farmer-only")
+def farmer_only_route(
+    current_user: User = Depends(require_roles([UserRole.FARMER]))
+) -> Any:
+    return {"message": "Access granted to Farmer endpoint", "user": current_user.email, "role": current_user.role}
+
+
+@router.get("/quality-only")
+def quality_only_route(
+    current_user: User = Depends(require_roles([UserRole.QUALITY_OFFICER]))
+) -> Any:
+    return {"message": "Access granted to Quality Officer endpoint", "user": current_user.email, "role": current_user.role}
+
+
+@router.get("/admin-only")
+def admin_only_route(
+    current_user: User = Depends(require_roles([UserRole.SUPER_ADMIN]))
+) -> Any:
+    return {"message": "Access granted to Super Admin endpoint", "user": current_user.email, "role": current_user.role}
 
 
 @router.get("/users", response_model=List[UserResponse])

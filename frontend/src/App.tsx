@@ -7,6 +7,7 @@ import { Home } from './pages/Home';
 import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
+import { Unauthorized } from './pages/Unauthorized';
 
 export const App: React.FC = () => {
   return (
@@ -18,10 +19,24 @@ export const App: React.FC = () => {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
 
-            {/* Protected Routes */}
+            {/* General Protected Routes */}
             <Route element={<ProtectedRoute />}>
               <Route path="/dashboard" element={<Dashboard />} />
+            </Route>
+
+            {/* Role-Restricted Protected Routes */}
+            <Route element={<ProtectedRoute allowedRoles={['SUPER_ADMIN']} />}>
+              <Route path="/admin" element={<Dashboard />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['FARMER']} />}>
+              <Route path="/farmer" element={<Dashboard />} />
+            </Route>
+
+            <Route element={<ProtectedRoute allowedRoles={['QUALITY_OFFICER']} />}>
+              <Route path="/quality" element={<Dashboard />} />
             </Route>
 
             {/* Catch-all redirect */}
