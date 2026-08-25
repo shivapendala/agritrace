@@ -9,6 +9,7 @@ import { QualityOfficerDashboard } from './QualityOfficerDashboard';
 import { WarehouseManagerDashboard } from './WarehouseManagerDashboard';
 import { TransportManagerDashboard } from './TransportManagerDashboard';
 import { RetailerDashboard } from './RetailerDashboard';
+import { AnalyticsDashboard } from './AnalyticsDashboard';
 import {
   Sprout,
   ShieldCheck,
@@ -20,7 +21,8 @@ import {
   Users,
   Activity,
   Award,
-  Layers
+  Layers,
+  BarChart3
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
@@ -29,7 +31,7 @@ export const Dashboard: React.FC = () => {
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [userError, setUserError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'warehouse' | 'transport' | 'retail' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
+  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'warehouse' | 'transport' | 'retail' | 'batches' | 'admin_users' | 'admin_farmers' | 'analytics'>('analytics');
 
   useEffect(() => {
     if (user && user.role === 'SUPER_ADMIN') {
@@ -137,6 +139,12 @@ export const Dashboard: React.FC = () => {
         {user.role === 'SUPER_ADMIN' && (
           <>
             <button
+              onClick={() => setActiveTab('analytics')}
+              className={`btn ${activeTab === 'analytics' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <BarChart3 size={16} /> Traceability Analytics & Reports
+            </button>
+            <button
               onClick={() => setActiveTab('retail')}
               className={`btn ${activeTab === 'retail' ? 'btn-primary' : 'btn-secondary'}`}
             >
@@ -181,6 +189,12 @@ export const Dashboard: React.FC = () => {
           </>
         )}
       </div>
+
+      {(user.role === 'SUPER_ADMIN' && activeTab === 'analytics') && (
+        <div style={{ marginBottom: '2.5rem' }}>
+          <AnalyticsDashboard />
+        </div>
+      )}
 
       {/* Tab Render Views */}
       {user.role === 'FARMER' && activeTab === 'farmer' && (

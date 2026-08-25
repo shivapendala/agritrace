@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.api.v1.endpoints import (
     auth, health, farmers, farms, harvests, batches,
     inspections, warehouses, inventory, transport,
-    retail, verify, notifications
+    retail, verify, notifications, analytics
 )
 
 api_router = APIRouter()
@@ -19,3 +19,4 @@ api_router.include_router(transport.router, prefix="/transport", tags=["Transpor
 api_router.include_router(retail.router, prefix="/retail", tags=["Retailer Operations & Receiving"])
 api_router.include_router(verify.router, prefix="/verify", tags=["Public QR Code Traceability Verification"])
 api_router.include_router(notifications.router, prefix="/notifications", tags=["In-App Notifications & Event Alerts"])
+api_router.include_router(analytics.router, prefix="/analytics", tags=["Traceability Analytics & Reporting"])
