@@ -44,6 +44,18 @@ from app.schemas.warehouse import (
     InventoryDispatch,
     InventoryResponse,
 )
+from app.schemas.transport import (
+    VehicleCreate,
+    VehicleResponse,
+    DriverCreate,
+    DriverResponse,
+    ShipmentCreate,
+    ShipmentAssign,
+    ShipmentStatusUpdate,
+    TemperatureLogCreate,
+    TemperatureLogResponse,
+    ShipmentResponse,
+)
 
 __all__ = [
     "UserCreate",
@@ -82,4 +94,14 @@ __all__ = [
     "InventoryAdjust",
     "InventoryDispatch",
     "InventoryResponse",
+    "VehicleCreate",
+    "VehicleResponse",
+    "DriverCreate",
+    "DriverResponse",
+    "ShipmentCreate",
+    "ShipmentAssign",
+    "ShipmentStatusUpdate",
+    "TemperatureLogCreate",
+    "TemperatureLogResponse",
+    "ShipmentResponse",
 ]

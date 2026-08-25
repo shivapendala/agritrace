@@ -5,6 +5,7 @@ from app.models.farm import FarmerProfile, Farm, Crop, VerificationStatus, CropS
 from app.models.batch import Harvest, Batch, BatchStatus
 from app.models.inspection import QualityInspection, InspectionStatus, QualityGrade
 from app.models.warehouse import Warehouse, StorageZone, StorageLocation, InventoryItem, InventoryStatus
+from app.models.transport import Vehicle, DriverProfile, Shipment, TemperatureLog, TransportStatus
 
 __all__ = [
     "Base",
@@ -27,4 +28,9 @@ __all__ = [
     "StorageLocation",
     "InventoryItem",
     "InventoryStatus",
+    "Vehicle",
+    "DriverProfile",
+    "Shipment",
+    "TemperatureLog",
+    "TransportStatus",
 ]
