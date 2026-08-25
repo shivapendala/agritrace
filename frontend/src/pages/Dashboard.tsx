@@ -5,6 +5,7 @@ import { User } from '../types/auth';
 import { FarmerDashboard } from './FarmerDashboard';
 import { AdminFarmerManagement } from './AdminFarmerManagement';
 import { HarvestBatchManager } from './HarvestBatchManager';
+import { QualityOfficerDashboard } from './QualityOfficerDashboard';
 import {
   Sprout,
   ShieldCheck,
@@ -25,7 +26,7 @@ export const Dashboard: React.FC = () => {
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [userError, setUserError] = useState<string | null>(null);
 
-  const [activeTab, setActiveTab] = useState<'farmer' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
+  const [activeTab, setActiveTab] = useState<'farmer' | 'inspections' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
 
   useEffect(() => {
     if (user && user.role === 'SUPER_ADMIN') {
@@ -75,7 +76,7 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Tab Controls for Farmer & Super Admin */}
+      {/* Tab Controls */}
       <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
         {user.role === 'FARMER' && (
           <>
@@ -94,8 +95,23 @@ export const Dashboard: React.FC = () => {
           </>
         )}
 
+        {user.role === 'QUALITY_OFFICER' && (
+          <button
+            onClick={() => setActiveTab('inspections')}
+            className="btn btn-primary"
+          >
+            <ShieldCheck size={16} /> Quality Inspection Workflow
+          </button>
+        )}
+
         {user.role === 'SUPER_ADMIN' && (
           <>
+            <button
+              onClick={() => setActiveTab('inspections')}
+              className={`btn ${activeTab === 'inspections' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <ShieldCheck size={16} /> Quality Inspections
+            </button>
             <button
               onClick={() => setActiveTab('batches')}
               className={`btn ${activeTab === 'batches' ? 'btn-primary' : 'btn-secondary'}`}
@@ -125,7 +141,13 @@ export const Dashboard: React.FC = () => {
         </div>
       )}
 
-      {(activeTab === 'batches' || (user.role !== 'FARMER' && user.role !== 'SUPER_ADMIN')) && (
+      {(user.role === 'QUALITY_OFFICER' || activeTab === 'inspections') && (
+        <div style={{ marginBottom: '2.5rem' }}>
+          <QualityOfficerDashboard />
+        </div>
+      )}
+
+      {(activeTab === 'batches' && user.role !== 'QUALITY_OFFICER') && (
         <div style={{ marginBottom: '2.5rem' }}>
           <HarvestBatchManager />
         </div>

@@ -25,6 +25,11 @@ from app.schemas.batch import (
     BatchStatusUpdate,
     BatchQuantityDeduct,
 )
+from app.schemas.inspection import (
+    InspectionCreate,
+    InspectionReviewAction,
+    InspectionResponse,
+)
 
 __all__ = [
     "UserCreate",
@@ -48,4 +53,7 @@ __all__ = [
     "BatchResponse",
     "BatchStatusUpdate",
     "BatchQuantityDeduct",
+    "InspectionCreate",
+    "InspectionReviewAction",
+    "InspectionResponse",
 ]
