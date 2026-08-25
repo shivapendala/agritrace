@@ -31,6 +31,7 @@ AgriTrace is a comprehensive farm-to-market agricultural product traceability pl
 - [x] **Phase 1: Project Architecture & Foundation**: Environment setup, Docker Compose, PostgreSQL database, health endpoint, base layout.
 - [x] **Phase 2: Authentication & Role-Based Access Control (RBAC)**: User models, Role models, Bcrypt password hashing, JWT access/refresh token issuance, current user profile endpoint, role authorization guards, dynamic navigation, 403 unauthorized handler, and Pytest security suite.
 - [x] **Phase 3: Farmer and Farm Management**: Farmer profiles, contact & address management, verification status (`UNVERIFIED`, `VERIFIED`, `SUSPENDED`), Farm CRUD operations (GPS coordinates, area size, soil type, irrigation system), Crop tracking (variety, planting dates, harvest status), Admin verification & suspension workflows, and Pytest suite.
+- [x] **Phase 4: Harvest and Batch Management**: Harvest logging (quantity, unit, method, initial grade, notes), Unique traceability batch generator (`TOM-2026-0001` pattern), Batch status lifecycle (`HARVESTED`, `QUALITY_PENDING`, `QUALITY_APPROVED`, `IN_WAREHOUSE`, `IN_TRANSIT`, `AT_RETAILER`, `SOLD`, `REJECTED`), Quantity inventory tracking & over-deduction guards, interactive provenance step timeline, and Pytest suite.
 
 ---
 

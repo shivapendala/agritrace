@@ -4,6 +4,7 @@ import { api } from '../services/api';
 import { User } from '../types/auth';
 import { FarmerDashboard } from './FarmerDashboard';
 import { AdminFarmerManagement } from './AdminFarmerManagement';
+import { HarvestBatchManager } from './HarvestBatchManager';
 import {
   Sprout,
   ShieldCheck,
@@ -14,7 +15,8 @@ import {
   Store,
   Users,
   Activity,
-  Award
+  Award,
+  Layers
 } from 'lucide-react';
 
 export const Dashboard: React.FC = () => {
@@ -22,7 +24,8 @@ export const Dashboard: React.FC = () => {
   const [usersList, setUsersList] = useState<User[]>([]);
   const [loadingUsers, setLoadingUsers] = useState<boolean>(false);
   const [userError, setUserError] = useState<string | null>(null);
-  const [adminTab, setAdminTab] = useState<'users' | 'farmers'>('users');
+
+  const [activeTab, setActiveTab] = useState<'farmer' | 'batches' | 'admin_users' | 'admin_farmers'>('farmer');
 
   useEffect(() => {
     if (user && user.role === 'SUPER_ADMIN') {
@@ -72,79 +75,112 @@ export const Dashboard: React.FC = () => {
         </div>
       </div>
 
-      {/* Render Dedicated Role Dashboards */}
-      {user.role === 'FARMER' && (
+      {/* Tab Controls for Farmer & Super Admin */}
+      <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        {user.role === 'FARMER' && (
+          <>
+            <button
+              onClick={() => setActiveTab('farmer')}
+              className={`btn ${activeTab === 'farmer' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Sprout size={16} /> Farm & Crop Management
+            </button>
+            <button
+              onClick={() => setActiveTab('batches')}
+              className={`btn ${activeTab === 'batches' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Layers size={16} /> Harvest & Traceability Batches
+            </button>
+          </>
+        )}
+
+        {user.role === 'SUPER_ADMIN' && (
+          <>
+            <button
+              onClick={() => setActiveTab('batches')}
+              className={`btn ${activeTab === 'batches' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Layers size={16} /> Traceability Batches
+            </button>
+            <button
+              onClick={() => setActiveTab('admin_users')}
+              className={`btn ${activeTab === 'admin_users' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Users size={16} /> System Users
+            </button>
+            <button
+              onClick={() => setActiveTab('admin_farmers')}
+              className={`btn ${activeTab === 'admin_farmers' ? 'btn-primary' : 'btn-secondary'}`}
+            >
+              <Sprout size={16} /> Farmer Verification Directory
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Tab Render Views */}
+      {user.role === 'FARMER' && activeTab === 'farmer' && (
         <div style={{ marginBottom: '2.5rem' }}>
           <FarmerDashboard />
         </div>
       )}
 
-      {/* Super Admin Tabs & Views */}
-      {user.role === 'SUPER_ADMIN' && (
+      {(activeTab === 'batches' || (user.role !== 'FARMER' && user.role !== 'SUPER_ADMIN')) && (
         <div style={{ marginBottom: '2.5rem' }}>
-          <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-            <button
-              onClick={() => setAdminTab('users')}
-              className={`btn ${adminTab === 'users' ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              <Users size={16} /> All System Users
-            </button>
-            <button
-              onClick={() => setAdminTab('farmers')}
-              className={`btn ${adminTab === 'farmers' ? 'btn-primary' : 'btn-secondary'}`}
-            >
-              <Sprout size={16} /> Farmer Verification Directory
-            </button>
+          <HarvestBatchManager />
+        </div>
+      )}
+
+      {user.role === 'SUPER_ADMIN' && activeTab === 'admin_farmers' && (
+        <div style={{ marginBottom: '2.5rem' }}>
+          <AdminFarmerManagement />
+        </div>
+      )}
+
+      {user.role === 'SUPER_ADMIN' && activeTab === 'admin_users' && (
+        <div className="glass-panel" style={{ padding: '1.75rem', marginBottom: '2.5rem' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Users size={20} style={{ color: 'var(--primary)' }} />
+              <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Registered System Users</h3>
+            </div>
+            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.05)', padding: '0.3rem 0.75rem', borderRadius: 'var(--radius-full)' }}>
+              Total Users: {usersList.length}
+            </span>
           </div>
 
-          {adminTab === 'farmers' ? (
-            <AdminFarmerManagement />
+          {loadingUsers ? (
+            <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading user directory...</div>
+          ) : userError ? (
+            <div className="alert-error">{userError}</div>
           ) : (
-            <div className="glass-panel" style={{ padding: '1.75rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <Users size={20} style={{ color: 'var(--primary)' }} />
-                  <h3 style={{ fontSize: '1.2rem', fontWeight: 700 }}>Registered System Users</h3>
-                </div>
-                <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', background: 'rgba(255,255,255,0.05)', padding: '0.3rem 0.75rem', borderRadius: 'var(--radius-full)' }}>
-                  Total Users: {usersList.length}
-                </span>
-              </div>
-
-              {loadingUsers ? (
-                <div style={{ padding: '1.5rem', textAlign: 'center', color: 'var(--text-muted)' }}>Loading user directory...</div>
-              ) : userError ? (
-                <div className="alert-error">{userError}</div>
-              ) : (
-                <div style={{ overflowX: 'auto' }}>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
-                    <thead>
-                      <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
-                        <th style={{ padding: '0.75rem 1rem' }}>User</th>
-                        <th style={{ padding: '0.75rem 1rem' }}>Email</th>
-                        <th style={{ padding: '0.75rem 1rem' }}>Role</th>
-                        <th style={{ padding: '0.75rem 1rem' }}>Organization</th>
-                        <th style={{ padding: '0.75rem 1rem' }}>Created</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {usersList.map((u) => (
-                        <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
-                          <td style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>{u.full_name}</td>
-                          <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{u.email}</td>
-                          <td style={{ padding: '0.75rem 1rem' }}>
-                            <span className={`role-badge role-${u.role}`}>{u.role}</span>
-                          </td>
-                          <td style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)' }}>{u.organization || 'N/A'}</td>
-                          <td style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
-                            {new Date(u.created_at).toLocaleDateString()}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.9rem' }}>
+                <thead>
+                  <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-secondary)' }}>
+                    <th style={{ padding: '0.75rem 1rem' }}>User</th>
+                    <th style={{ padding: '0.75rem 1rem' }}>Email</th>
+                    <th style={{ padding: '0.75rem 1rem' }}>Role</th>
+                    <th style={{ padding: '0.75rem 1rem' }}>Organization</th>
+                    <th style={{ padding: '0.75rem 1rem' }}>Created</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {usersList.map((u) => (
+                    <tr key={u.id} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                      <td style={{ padding: '0.75rem 1rem', fontWeight: 600 }}>{u.full_name}</td>
+                      <td style={{ padding: '0.75rem 1rem', color: 'var(--text-secondary)' }}>{u.email}</td>
+                      <td style={{ padding: '0.75rem 1rem' }}>
+                        <span className={`role-badge role-${u.role}`}>{u.role}</span>
+                      </td>
+                      <td style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)' }}>{u.organization || 'N/A'}</td>
+                      <td style={{ padding: '0.75rem 1rem', color: 'var(--text-muted)', fontSize: '0.8rem' }}>
+                        {new Date(u.created_at).toLocaleDateString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           )}
         </div>

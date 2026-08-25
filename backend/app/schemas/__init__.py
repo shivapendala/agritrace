@@ -18,6 +18,13 @@ from app.schemas.farmer import (
     CropResponse,
     FarmerAdminAction,
 )
+from app.schemas.batch import (
+    HarvestCreate,
+    HarvestResponse,
+    BatchResponse,
+    BatchStatusUpdate,
+    BatchQuantityDeduct,
+)
 
 __all__ = [
     "UserCreate",
@@ -36,4 +43,9 @@ __all__ = [
     "CropCreate",
     "CropResponse",
     "FarmerAdminAction",
+    "HarvestCreate",
+    "HarvestResponse",
+    "BatchResponse",
+    "BatchStatusUpdate",
+    "BatchQuantityDeduct",
 ]
