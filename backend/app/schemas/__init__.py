@@ -7,6 +7,17 @@ from app.schemas.auth import (
     Token,
     TokenPayload,
 )
+from app.schemas.farmer import (
+    FarmerProfileCreate,
+    FarmerProfileUpdate,
+    FarmerProfileResponse,
+    FarmCreate,
+    FarmUpdate,
+    FarmResponse,
+    CropCreate,
+    CropResponse,
+    FarmerAdminAction,
+)
 
 __all__ = [
     "UserCreate",
@@ -16,4 +27,13 @@ __all__ = [
     "RefreshTokenRequest",
     "Token",
     "TokenPayload",
+    "FarmerProfileCreate",
+    "FarmerProfileUpdate",
+    "FarmerProfileResponse",
+    "FarmCreate",
+    "FarmUpdate",
+    "FarmResponse",
+    "CropCreate",
+    "CropResponse",
+    "FarmerAdminAction",
 ]
