@@ -10,6 +10,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Unauthorized } from './pages/Unauthorized';
 
 import { PublicVerifyProduct } from './pages/PublicVerifyProduct';
+import { BatchGenealogy } from './pages/BatchGenealogy';
 
 export const App: React.FC = () => {
   return (
@@ -43,6 +44,10 @@ export const App: React.FC = () => {
 
             <Route element={<ProtectedRoute allowedRoles={['QUALITY_OFFICER']} />}>
               <Route path="/quality" element={<Dashboard />} />
+            </Route>
+
+            <Route element={<ProtectedRoute />}>
+              <Route path="/batches/:id/genealogy" element={<BatchGenealogy />} />
             </Route>
 
             {/* Catch-all redirect */}

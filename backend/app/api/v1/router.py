@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.api.v1.endpoints import (
     auth, health, farmers, farms, harvests, batches,
     inspections, warehouses, inventory, transport,
-    retail, verify, notifications, analytics, audit
+    retail, verify, notifications, analytics, audit, genealogy
 )
 
 api_router = APIRouter()
@@ -12,6 +12,7 @@ api_router.include_router(farmers.router, prefix="/farmers", tags=["Farmer Profi
 api_router.include_router(farms.router, prefix="/farms", tags=["Farms & Crops"])
 api_router.include_router(harvests.router, prefix="/harvests", tags=["Harvest Logging"])
 api_router.include_router(batches.router, prefix="/batches", tags=["Traceability Batches"])
+api_router.include_router(genealogy.router, prefix="/genealogy", tags=["Product Genealogy"])
 api_router.include_router(inspections.router, prefix="/inspections", tags=["Quality Inspection Workflow"])
 api_router.include_router(warehouses.router, prefix="/warehouses", tags=["Cold Storage Warehouses"])
 api_router.include_router(inventory.router, prefix="/inventory", tags=["Inventory Management"])

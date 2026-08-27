@@ -63,6 +63,15 @@ from app.schemas.retail import (
     RetailReceiptResponse,
     RetailInventoryResponse,
 )
+from app.schemas.genealogy import (
+    BatchLineageCreate,
+    BatchLineageResponse,
+    ProductTransformationCreate,
+    ProductTransformationResponse,
+    BatchSplitRequest,
+    BatchMergeRequest,
+    BatchTransformRequest,
+)
 
 __all__ = [
     "UserCreate",
@@ -116,4 +125,11 @@ __all__ = [
     "RetailReceiptCreate",
     "RetailReceiptResponse",
     "RetailInventoryResponse",
+    "BatchLineageCreate",
+    "BatchLineageResponse",
+    "ProductTransformationCreate",
+    "ProductTransformationResponse",
+    "BatchSplitRequest",
+    "BatchMergeRequest",
+    "BatchTransformRequest",
 ]

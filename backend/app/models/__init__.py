@@ -9,6 +9,7 @@ from app.models.transport import Vehicle, DriverProfile, Shipment, TemperatureLo
 from app.models.retail import RetailerProfile, RetailReceipt, RetailInventory, ReceiptStatus
 from app.models.notification import Notification
 from app.models.audit_log import AuditLog
+from app.models.genealogy import BatchLineage, ProductTransformation, OperationType
 
 __all__ = [
     "Base",
@@ -42,4 +43,7 @@ __all__ = [
     "ReceiptStatus",
     "Notification",
     "AuditLog",
+    "BatchLineage",
+    "ProductTransformation",
+    "OperationType",
 ]

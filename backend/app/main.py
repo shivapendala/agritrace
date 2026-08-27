@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
 from app.db.session import engine, Base, SessionLocal
 from app.models.user import User, UserRole
+import app.models  # Ensures all models are registered with Base.metadata
 from app.core.security import get_password_hash
 from app.api.v1.router import api_router
 
